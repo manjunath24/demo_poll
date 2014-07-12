@@ -1,4 +1,4 @@
-demo_poll
+Demo Poll App
 =========
 
 A simple poll application
