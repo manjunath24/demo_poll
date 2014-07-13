@@ -1,0 +1,36 @@
+{% load staticfiles %}
+
+<html>
+    <head>
+        <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}"/>
+    </head>
+
+    <body>
+       <div class="container">
+	       <h1><a href="{% url 'home' %}">Polls</a></h1>
+	       <div class="navbar">
+		      <div class="navbar-inner">
+		        <div class="container">
+		          <ul class="nav">
+		            <li ><a href="{% url 'home' %}">Home</a></li>
+		            <li ><a href="{% url 'registration' %}">Register</a></li>
+		            {% if not user.is_authenticated %}
+		            <li ><a href="{% url 'signin' %}">Login</a></li>
+		            {% endif %}
+		            {% if user.is_authenticated %}
+		            <li>
+                        <a> Welcome <b>{{ user.username|title }}</b></a>
+		            </li>
+		            <li>
+		                <a href="{% url 'signout' %}">Logout</a>
+		            </li>
+		            {% endif %}
+		          </ul>
+		        </div>
+		      </div>
+	        </div>
+	        {% block content %}
+	        {% endblock %}
+        </div>
+	</body>
+</html>

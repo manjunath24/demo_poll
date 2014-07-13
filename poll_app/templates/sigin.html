@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form action="{% url 'signin' %}" method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input class="btn btn-primary" type="submit" value="Login">
+</form>
+
+{% for message in messages %}
+<div class="alert alert-error">
+    {{ message }}
+</div>
+{% endfor %}
+
+{% endblock %}

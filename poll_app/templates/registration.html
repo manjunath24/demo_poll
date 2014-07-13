@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form action="{% url 'registration' %}" method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input  class="btn btn-primary"  type="submit" value="Register">
+</form>
+
+{% for message in messages %}
+<div class="alert alert-success">
+    {{ message }}
+ </div>
+{% endfor %}
+{% endblock %}

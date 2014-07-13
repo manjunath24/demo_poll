@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h4>{{ poll.name }}</h4>
+<form action="{% url 'vote' poll.id %}" method="post">{% csrf_token %}
+    <ul style="list-style:None">
+       {% for choices in poll.pollchoice_set.all %}
+       <li>
+         <input type="radio" value="{{choices.id}}" name="choices"/>
+         {{ choices.Choice_name }} -- Votes: {{ choices.no_of_votes }}
+       </li>
+       {% endfor %}
+    </ul>
+    <input type = "submit" value="vote">
+    Published on: {{ poll.pub_date }}
+
+</form> 
+published on:{{ poll.pub_date }}
+
+
+{% for message in messages %}
+   <h1> {{ message }} </h1>
+{% endfor %}
+{% endblock %}
+
