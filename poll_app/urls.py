@@ -9,5 +9,6 @@ urlpatterns = patterns('',
 	url(r'^signin/', views.signin, name='signin'),
 	url(r'^signout/', views.signout, name='signout'),
 	url(r'^(?P<poll_id>[0-9]+)/delete/', views.delete, name='delete'),
+	url(r'^profile/', views.profile, name='profile'),
 
 )

@@ -3,14 +3,16 @@ from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.core.mail import EmailMessage
+from django.conf import settings
 
 from poll_app.models import PollQuestion, PollChoice, VoteTracker
-from poll_app.forms import UserRegistrationForm, LoginForm
+from poll_app.forms import UserRegistrationForm, LoginForm, Profile
 
 
 def index(request):
 	polls = PollQuestion.objects.all()
-	return render(request, 'home.html', {'polls': polls})
+	return render(request, 'home.html', {'polls': polls, 'home': True})
 
 
 def detail(request, poll_id):
@@ -30,19 +32,21 @@ def vote(request, poll_id):
 	    messages.success(request, 'You have successfully voted')
     else:
         messages.error(request, 'You have already voted')
-    return redirect(reverse('detail',args = (poll.id,))) 
+    return redirect(reverse('detail', args=(poll.id,))) 
 
 
 def registration(request):
 	if request.method == "POST":
 	    form = UserRegistrationForm(request.POST)
 	    if form.is_valid():
-	    	form.save()
-	    	messages.success(request, 'You are successfully registered')
-	    	return redirect('registration')
+	    	user = form.save()
+            msg = EmailMessage('Hi', 'This is from localhost', settings.EMAIL_HOST_USER, [user.email])
+            msg.send()
+            messages.success(request, 'You are successfully registered')
+            return redirect('registration')
 	else:
 		form = UserRegistrationForm()
-	return render(request, 'registration.html', {'form': form})
+	return render(request, 'registration.html', {'form': form, 'reg': True})
 
 
 def signin(request):
@@ -64,7 +68,7 @@ def signin(request):
                 return redirect('signin')
     else:
         form = LoginForm()
-        return render(request, 'sigin.html', {'form': form})
+        return render(request, 'sigin.html', {'form': form, 'signin': True})
 
 
 @login_required
@@ -76,3 +80,22 @@ def delete(request, poll_id):
 def signout(request):
 	request.session.flush()
 	return redirect('home')
+
+
+@login_required
+def profile(request):
+    if request.method == "POST":
+        form = Profile(request.POST)
+        if form.is_valid():
+            user = request.user
+            if 'first_name' in form.cleaned_data:
+            	user.first_name = form.cleaned_data['first_name']
+            if 'last_name' in  form.cleaned_data:
+            	user.last_name = form.cleaned_data['last_name']
+            if 'password' in form.cleaned_data:
+            	user.set_password(form.cleaned_data['password'])
+            user.save()
+
+    else:
+        form = Profile(initial={'first_name': request.user.first_name, 'last_name': request.user.last_name})
+    return render(request, 'profile.html', {'form': form, 'profile': True})

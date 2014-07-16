@@ -1,13 +1,16 @@
 {% extends 'base.html' %}
 
+{% load my_tags %}
+
 {% block content %}
-<h4>{{ poll.name }}</h4>
+<h4>{{ poll.name|title }}</h4>
+
 <form action="{% url 'vote' poll.id %}" method="post">{% csrf_token %}
     <ul style="list-style:None">
        {% for choices in poll.pollchoice_set.all %}
        <li>
          <input type="radio" value="{{choices.id}}" name="choices"/>
-         {{ choices.Choice_name }} -- Votes: {{ choices.no_of_votes }}
+         {{ choices.Choice_name }} -- Votes: {{ choices.no_of_votes|percentage:poll.id }} %
        </li>
        {% endfor %}
     </ul>

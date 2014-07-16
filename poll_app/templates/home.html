@@ -4,9 +4,8 @@
 	{% for poll in polls %}
 	<h4><a href={% url 'detail' poll.id %}>{{ poll.name }}</a></h4>
 	Published on {{ poll.pub_date }}
-	<a href="{% url 'delete' poll.id %}" onclick="return confirm('Are you sure?')">Delete</a>
 	   {% empty %}
 	   <h1>No polls available</h1>
     {% endfor %}
 {% endblock %}
-	}
+	
