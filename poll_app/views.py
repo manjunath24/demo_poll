@@ -5,14 +5,18 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage
 from django.conf import settings
+from django.core.paginator import Paginator
 
 from poll_app.models import PollQuestion, PollChoice, VoteTracker
 from poll_app.forms import UserRegistrationForm, LoginForm, Profile
 
 
 def index(request):
-	polls = PollQuestion.objects.all()
-	return render(request, 'home.html', {'polls': polls, 'home': True})
+    polls = PollQuestion.objects.all()
+    paginator = Paginator(polls, 1)
+    page = request.GET.get('page', '1')
+    poll_pagination = paginator.page(page)
+    return render(request, 'home.html', {'polls': poll_pagination, 'home': True})
 
 
 def detail(request, poll_id):
@@ -32,7 +36,7 @@ def vote(request, poll_id):
 	    messages.success(request, 'You have successfully voted')
     else:
         messages.error(request, 'You have already voted')
-    return redirect(reverse('detail', args=(poll.id,))) 
+    return redirect(reverse('detail', args=(poll.id,)))
 
 
 def registration(request):

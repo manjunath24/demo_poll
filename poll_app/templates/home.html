@@ -1,11 +1,30 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 	{% for poll in polls %}
 	<h4><a href={% url 'detail' poll.id %}>{{ poll.name }}</a></h4>
 	Published on {{ poll.pub_date }}
 	   {% empty %}
 	   <h1>No polls available</h1>
     {% endfor %}
+
+
+<div class="pagination">
+    <span class="step-links">
+        {% if polls.has_previous %}
+            <a href="?page={{ polls.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ polls.number }} of {{ polls.paginator.num_pages }}.
+        </span>
+
+        {% if polls.has_next %}
+            <a href="?page={{ polls.next_page_number }}">Next</a>
+        {% endif %}
+    </span>
+</div>
+
 {% endblock %}
-	
+

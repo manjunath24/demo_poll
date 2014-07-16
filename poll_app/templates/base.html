@@ -18,13 +18,14 @@
 		            <li {% if signin %}class="active"{% endif %}><a href="{% url 'signin' %}">Login</a></li>
 		            {% endif %}
 		            {% if user.is_authenticated %}
+                    <li {% if profile %}class="active"{% endif %}><a href="{% url 'profile' %}">My Profile</a>
+                    </li>
 		            <li>
                         <a> Welcome <b>{{ user.username|title }}</b></a>
 		            </li>
-		            <li>
-		                <a href="{% url 'signout' %}">Logout</a>
-		            </li>
-		            <li {% if profile %}class="active"{% endif %}><a href="{% url 'profile' %}">My Profile</a></li>
+                    <li>
+                        <a href="{% url 'signout' %}">Logout</a>
+                    </li>
 		            {% endif %}
 		          </ul>
 		        </div>

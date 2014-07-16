@@ -14,11 +14,10 @@
        </li>
        {% endfor %}
     </ul>
-    <input type = "submit" value="vote">
-    Published on: {{ poll.pub_date }}
+    <input class="btn btn-primary" type="submit" value="Vote">
+</form>
 
-</form> 
-published on:{{ poll.pub_date }}
+Published on:{{ poll.pub_date }}
 
 
 {% for message in messages %}
